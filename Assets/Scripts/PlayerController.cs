@@ -7,7 +7,9 @@ public class PlayerController : MonoBehaviour {
 	public bool doubleJump = true;
 	public KeyCode jumpKey = KeyCode.Space;
 	public LayerMask groundLayer;
+	public GameObject confirm;
 
+	public Queue speedChanges = new Queue();
 	private Rigidbody2D myRigidbody;
 	private Collider2D myCollider;
 	private bool airJumped = false;
@@ -19,7 +21,6 @@ public class PlayerController : MonoBehaviour {
 		myRigidbody = GetComponent<Rigidbody2D> ();
 		myCollider = GetComponent<Collider2D> ();
 
-		processor = FindObjectOfType<AudioProcessor>();
 		StartCoroutine(StartRunning());
 	}
 	
@@ -27,9 +28,7 @@ public class PlayerController : MonoBehaviour {
 	void Update () {
 		if (!running)
 			return;
-		
-		if (processor.BPM () < 300)
-			moveSpeed = (moveSpeed * 800 + processor.BPM ()/3) / 801;
+		moveSpeed = (float)speedChanges.Dequeue ();
 		myRigidbody.velocity = new Vector2 (moveSpeed, myRigidbody.velocity.y); // Palaiko vienoda.
 
 		if (Input.GetKeyDown(jumpKey) && canJump()) {
@@ -48,7 +47,7 @@ public class PlayerController : MonoBehaviour {
 		return false;
 	}
 	IEnumerator StartRunning() {
-		yield return new WaitForSeconds(5);
+		yield return new WaitForSeconds(1);
 		GetComponent<AudioSource> ().Play ();
 		running = true;
 	}
