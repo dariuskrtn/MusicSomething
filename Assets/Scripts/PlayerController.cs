@@ -2,12 +2,20 @@
 using System.Collections;
 
 public class PlayerController : MonoBehaviour {
+	public Transform groundCheck;
 	public float moveSpeed = 15f;
 	public float jumpForce = 0.1f;
 	public bool doubleJump = true;
 	public KeyCode jumpKey = KeyCode.Space;
 	public LayerMask groundLayer;
 	public GameObject confirm;
+	public bool lookingRight = true;
+
+	private Animator cloudanim;
+	public GameObject Cloud;
+
+	private Animator anim;
+	private bool onGround = false;
 
 	private Rigidbody2D myRigidbody;
 	private Collider2D myCollider;
@@ -23,7 +31,7 @@ public class PlayerController : MonoBehaviour {
 	void Start () {
 		myRigidbody = GetComponent<Rigidbody2D> ();
 		myCollider = GetComponent<Collider2D> ();
-
+		anim = GetComponent<Animator>();
 		GetComponent<BeatDetection>().CallBackFunction = onBeat;
 
 		StartCoroutine(StartRunning());
@@ -49,6 +57,10 @@ public class PlayerController : MonoBehaviour {
 			break;
 		}
 	}
+	void FixedUpdate()
+	{
+		AnimationControl ();
+	}
 	private void generateLine(GameObject type)
 	{
 		Vector3 pos = new Vector3(transform.position.x, -8, 0);
@@ -58,6 +70,8 @@ public class PlayerController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (Input.GetKeyDown(jumpKey) && canJump()) {
+			Vector3 pos = new Vector3 (transform.position.x+1, transform.position.y, transform.position.z);
+			Instantiate (Cloud, pos, Quaternion.identity);
 			myRigidbody.velocity = new Vector2 (myRigidbody.velocity.x, myRigidbody.velocity.y+jumpForce);
 		}
 	}
@@ -86,4 +100,13 @@ public class PlayerController : MonoBehaviour {
 		GetComponent<AudioSource> ().Play ();
 		running = true;
 	}
+
+	void AnimationControl()
+	{
+		anim.SetFloat ("Speed", myRigidbody.velocity.x);
+		onGround = Physics2D.OverlapCircle (groundCheck.position, 0.15F, groundLayer);
+		anim.SetBool ("IsGrounded", onGround);
+		anim.SetFloat ("vSpeed", myRigidbody.velocity.y);
+	}
+
 }
