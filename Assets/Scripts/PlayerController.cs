@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour {
 	public Transform groundCheck;
@@ -36,16 +37,11 @@ public class PlayerController : MonoBehaviour {
 
 		StartCoroutine(StartRunning());
 	}
-	public void onBeat(BeatDetection.EventInfo eventInfo)
+
+    public void onBeat(BeatDetection.EventInfo eventInfo)
 	{
-		Debug.Log(eventInfo.messageInfo);
 		switch (eventInfo.messageInfo)
 		{
-		/*
-            case BeatDetection.EventType.Energy:
-                StartCoroutine(showText(energy, genergy));
-                break;
-            */
 		case BeatDetection.EventType.HitHat:
 			generateLine(hithat);
 			break;
@@ -80,7 +76,6 @@ public class PlayerController : MonoBehaviour {
 		speedChanges.Enqueue (vel);
 		if (!running)
 			return;
-		Debug.Log (1);
 		myRigidbody.velocity = new Vector2((float)speedChanges.Dequeue(), myRigidbody.velocity.y);
 	}
 	bool canJump() {
@@ -108,5 +103,19 @@ public class PlayerController : MonoBehaviour {
 		anim.SetBool ("IsGrounded", onGround);
 		anim.SetFloat ("vSpeed", myRigidbody.velocity.y);
 	}
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        Debug.Log("Dead");
+        // not smooth. ikr
+        myRigidbody.position = new Vector3(0, -5.5f, 0);
+        StartCoroutine(LoadLevelRoutine());
+    }
+
+    IEnumerator LoadLevelRoutine()
+    {
+        yield return new WaitForSeconds(1);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
 
 }

@@ -32,7 +32,6 @@ public class TrackGeneration : MonoBehaviour {
 
     public void onBeat(BeatDetection.EventInfo eventInfo)
     {
-        Debug.Log(eventInfo.messageInfo);
         switch (eventInfo.messageInfo)
         {
             case BeatDetection.EventType.HitHat:
@@ -49,7 +48,9 @@ public class TrackGeneration : MonoBehaviour {
 
     private void generateLine(GameObject type)
     {
-        Vector3 pos = new Vector3(transform.position.x, 8, 0);
+        // Neatsiras prie pat starto
+        if (transform.position.x < 0) return;
+        Vector3 pos = new Vector3(transform.position.x, -3.94f, 0);
         GameObject obj = Instantiate(type, pos, Quaternion.identity) as GameObject;
         GameObject.Destroy(obj, 10);
     }
