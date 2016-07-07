@@ -2,6 +2,7 @@
 using System.Collections;
 
 public class TrackGeneration : MonoBehaviour {
+
 	public GameObject hithat;
     public GameObject kick;
     public GameObject snare;
@@ -11,6 +12,7 @@ public class TrackGeneration : MonoBehaviour {
 	private PlayerController player;
 	Rigidbody2D myRigidbody;
 	private bool running = false;
+
 	// Use this for initialization
 	void Start () {
 		player = FindObjectOfType<PlayerController> ();
@@ -23,11 +25,7 @@ public class TrackGeneration : MonoBehaviour {
 	void FixedUpdate () {
 		if (!running)
 			return;
-        //if (processor.BPM () < 300)
-        //moveSpeed = (moveSpeed * 800 + processor.BPM ()/3) / 801;
-        //moveSpeed = (moveSpeed * 800 + 60 / 3) / 801;
 		moveSpeed +=0.01f;
-		//transform.
         myRigidbody.velocity = new Vector2 (moveSpeed, 0);
 		player.updateVelocity (moveSpeed);
 	}
@@ -37,11 +35,6 @@ public class TrackGeneration : MonoBehaviour {
         Debug.Log(eventInfo.messageInfo);
         switch (eventInfo.messageInfo)
         {
-            /*
-            case BeatDetection.EventType.Energy:
-                StartCoroutine(showText(energy, genergy));
-                break;
-            */
             case BeatDetection.EventType.HitHat:
                 generateLine(hithat);
                 break;
