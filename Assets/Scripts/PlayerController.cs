@@ -13,24 +13,61 @@ public class PlayerController : MonoBehaviour {
 	private Collider2D myCollider;
 	private bool airJumped = false;
 
+	public GameObject hithat;
+	public GameObject kick;
+	public GameObject snare;
+
 	bool running = false;
+	public Queue speedChanges = new Queue();
 	// Use this for initialization
 	void Start () {
 		myRigidbody = GetComponent<Rigidbody2D> ();
 		myCollider = GetComponent<Collider2D> ();
 
+		GetComponent<BeatDetection>().CallBackFunction = onBeat;
+
 		StartCoroutine(StartRunning());
 	}
-	
+	public void onBeat(BeatDetection.EventInfo eventInfo)
+	{
+		Debug.Log(eventInfo.messageInfo);
+		switch (eventInfo.messageInfo)
+		{
+		/*
+            case BeatDetection.EventType.Energy:
+                StartCoroutine(showText(energy, genergy));
+                break;
+            */
+		case BeatDetection.EventType.HitHat:
+			generateLine(hithat);
+			break;
+		case BeatDetection.EventType.Kick:
+			generateLine(kick);
+			break;
+		case BeatDetection.EventType.Snare:
+			generateLine(snare);
+			break;
+		}
+	}
+	private void generateLine(GameObject type)
+	{
+		Vector3 pos = new Vector3(transform.position.x, -8, 0);
+		GameObject obj = Instantiate(type, pos, Quaternion.identity) as GameObject;
+		GameObject.Destroy(obj, 10);
+	}
 	// Update is called once per frame
 	void Update () {
-		if (!running)
-			return;
-		myRigidbody.velocity = new Vector2 (moveSpeed, myRigidbody.velocity.y); // Palaiko vienoda.
-
 		if (Input.GetKeyDown(jumpKey) && canJump()) {
 			myRigidbody.velocity = new Vector2 (myRigidbody.velocity.x, myRigidbody.velocity.y+jumpForce);
 		}
+	}
+	public void updateVelocity(float vel)
+	{
+		speedChanges.Enqueue (vel);
+		if (!running)
+			return;
+		Debug.Log (1);
+		myRigidbody.velocity = new Vector2((float)speedChanges.Dequeue(), myRigidbody.velocity.y);
 	}
 	bool canJump() {
 		if (Physics2D.IsTouchingLayers (myCollider, groundLayer)) {
@@ -43,8 +80,9 @@ public class PlayerController : MonoBehaviour {
 		}
 		return false;
 	}
+
 	IEnumerator StartRunning() {
-		yield return new WaitForSeconds(0);
+		yield return new WaitForSeconds(5);
 		GetComponent<AudioSource> ().Play ();
 		running = true;
 	}
