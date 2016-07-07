@@ -45,16 +45,28 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Beat Detection\BeatDetection.cs" />
+     <Compile Include="Assets\Beat Detection\Event - Example Mic Input\EventMicExample.cs" />
+     <Compile Include="Assets\Beat Detection\Event - Example\EventExample.cs" />
+     <Compile Include="Assets\Beat Detection\No Event - Example Mic Input\BeatDetectionExampleMic.cs" />
+     <Compile Include="Assets\Beat Detection\No Event - Example\BeatDetectionExample.cs" />
      <Compile Include="Assets\Scripts\AudioProcessor.cs" />
      <Compile Include="Assets\Scripts\CameraController.cs" />
      <Compile Include="Assets\Scripts\PlayerController.cs" />
      <Compile Include="Assets\Scripts\TrackGeneration.cs" />
      <Compile Include="Assets\Spectrum.cs" />
+     <None Include="Assets\NAudio.xml" />
  <Reference Include="UnityEngine.UI">
  <HintPath>D:/Unity5/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.Networking">
  <HintPath>D:/Unity5/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
+ </Reference>
+ <Reference Include="NAudio">
+ <HintPath>D:/Unity Projektai/MusicSomething/Assets/NAudio.dll</HintPath>
+ </Reference>
+ <Reference Include="NAudio.WindowsMediaFormat">
+ <HintPath>D:/Unity Projektai/MusicSomething/Assets/NAudio.WindowsMediaFormat.dll</HintPath>
  </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
