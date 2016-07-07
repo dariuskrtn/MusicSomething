@@ -12,22 +12,24 @@ public class TrackGeneration : MonoBehaviour {
 	private PlayerController player;
 	AudioProcessor processor;
 	Rigidbody2D myRigidBody;
-
+	private bool running = false;
 	// Use this for initialization
 	void Start () {
 		myRigidBody = GetComponent<Rigidbody2D> ();
 		player = FindObjectOfType<PlayerController> ();
 
-        AudioBeat.GetComponent<BeatDetection>().CallBackFunction = onBeat;
+        GetComponent<BeatDetection>().CallBackFunction = onBeat;
+		StartCoroutine(StartRunning());
     }
 	
 	// Update is called once per frame
 	void Update () {
+		if (!running)
+			return;
         //if (processor.BPM () < 300)
         //moveSpeed = (moveSpeed * 800 + processor.BPM ()/3) / 801;
-        moveSpeed = (moveSpeed * 800 + 60 / 3) / 801;
+        //moveSpeed = (moveSpeed * 800 + 60 / 3) / 801;
         myRigidBody.velocity = new Vector2 (moveSpeed, 0);
-		player.speedChanges.Enqueue (moveSpeed);
 	}
 
     public void onBeat(BeatDetection.EventInfo eventInfo)
@@ -58,4 +60,10 @@ public class TrackGeneration : MonoBehaviour {
         GameObject obj = Instantiate(type, pos, Quaternion.identity) as GameObject;
         GameObject.Destroy(obj, 10);
     }
+
+	IEnumerator StartRunning() {
+		yield return new WaitForSeconds(0);
+		GetComponent<AudioSource> ().Play ();
+		running = true;
+	}
 }

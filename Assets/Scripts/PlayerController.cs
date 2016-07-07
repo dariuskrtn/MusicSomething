@@ -9,12 +9,10 @@ public class PlayerController : MonoBehaviour {
 	public LayerMask groundLayer;
 	public GameObject confirm;
 
-	public Queue speedChanges = new Queue();
 	private Rigidbody2D myRigidbody;
 	private Collider2D myCollider;
 	private bool airJumped = false;
 
-	AudioProcessor processor;
 	bool running = false;
 	// Use this for initialization
 	void Start () {
@@ -28,7 +26,6 @@ public class PlayerController : MonoBehaviour {
 	void Update () {
 		if (!running)
 			return;
-		moveSpeed = (float)speedChanges.Dequeue ();
 		myRigidbody.velocity = new Vector2 (moveSpeed, myRigidbody.velocity.y); // Palaiko vienoda.
 
 		if (Input.GetKeyDown(jumpKey) && canJump()) {
@@ -47,7 +44,7 @@ public class PlayerController : MonoBehaviour {
 		return false;
 	}
 	IEnumerator StartRunning() {
-		yield return new WaitForSeconds(1);
+		yield return new WaitForSeconds(0);
 		GetComponent<AudioSource> ().Play ();
 		running = true;
 	}
