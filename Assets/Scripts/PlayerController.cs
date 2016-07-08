@@ -111,19 +111,14 @@ public class PlayerController : MonoBehaviour {
         //myRigidbody.position = new Vector3(0, -5.5f, 0);
 		ParticleSystem pr = GetComponent<ParticleSystem> ();
 
-		int i = 1;
-		foreach (GameObject obstacle in GameObject.FindGameObjectsWithTag ("Deadly")) {
-			pr.collision.SetPlane (i, obstacle.transform);
-			i++;
-		}
-		pr.Emit (80);
+		pr.Emit (150);
 		transform.FindChild ("Textures").gameObject.SetActive (false);
         StartCoroutine(LoadLevelRoutine());
     }
 
     IEnumerator LoadLevelRoutine()
     {
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(2);
 		transform.FindChild ("Textures").gameObject.SetActive (true);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
