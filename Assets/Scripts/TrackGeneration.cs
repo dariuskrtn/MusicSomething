@@ -41,15 +41,20 @@ public class TrackGeneration : MonoBehaviour {
                 generateLine(kick);
                 break;
             case BeatDetection.EventType.Snare:
-                generateLine(snare);
+                generateObstacle(snare);
                 break;
         }
     }
-
+	private void generateObstacle(GameObject type)
+	{
+		// Neatsiras prie pat starto
+		if (transform.position.x < 0) return;
+		Vector3 pos = new Vector3(transform.position.x + (moveSpeed/7), -3.94f, 0);
+		GameObject obj = Instantiate(type, pos, Quaternion.identity) as GameObject;
+		GameObject.Destroy(obj, 10);
+	}
     private void generateLine(GameObject type)
     {
-        // Neatsiras prie pat starto
-        if (transform.position.x < 0) return;
         Vector3 pos = new Vector3(transform.position.x, -3.94f, 0);
         GameObject obj = Instantiate(type, pos, Quaternion.identity) as GameObject;
         GameObject.Destroy(obj, 10);
