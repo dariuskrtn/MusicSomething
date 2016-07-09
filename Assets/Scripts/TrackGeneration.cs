@@ -51,8 +51,9 @@ public class TrackGeneration : MonoBehaviour {
             case BeatDetection.EventType.Kick:
                 generateLine(kick);
                 break;
-            case BeatDetection.EventType.Snare:
-                generateObstacle(snare);
+		case BeatDetection.EventType.Snare:
+			generateLine (snare);
+			generateObstacle (Spike);
                 break;
         }
     }
@@ -60,7 +61,7 @@ public class TrackGeneration : MonoBehaviour {
 	{
         // Neatsiras prie pat starto
 		if (transform.position.x < 0) return;
-		Vector3 pos = new Vector3(transform.position.x + (moveSpeed/7), -3.94f, 0);
+		Vector3 pos = new Vector3(transform.position.x + (moveSpeed/5), -3.94f, 0);
 		GameObject obj = Instantiate(type, pos, Quaternion.identity) as GameObject;
 		GameObject.Destroy(obj, 10);
 	}
