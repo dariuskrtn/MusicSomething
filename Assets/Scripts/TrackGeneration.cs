@@ -3,11 +3,17 @@ using System.Collections;
 
 public class TrackGeneration : MonoBehaviour {
 
+	public GameObject Spike, Blackground, Ground, Jump;
 	public GameObject hithat;
     public GameObject kick;
     public GameObject snare;
+
+	public float maxSpeed = 50f;
+	public float minSpeed = 15f;
+
     public float moveSpeed = 0.1f;
-	public int lastObstacle = -16;
+
+	private GameObject lastObstacle;
 
 	private PlayerController player;
 	Rigidbody2D myRigidbody;
@@ -21,17 +27,22 @@ public class TrackGeneration : MonoBehaviour {
 		StartCoroutine(StartRunning());
 		myRigidbody = GetComponent<Rigidbody2D> ();
     }
-
+	void Update() {
+		if (moveSpeed>minSpeed)
+		moveSpeed -=0.05f;
+	}
 	void FixedUpdate () {
 		if (!running)
 			return;
-		moveSpeed +=0.01f;
         myRigidbody.velocity = new Vector2 (moveSpeed, 0);
 		player.updateVelocity (moveSpeed);
 	}
 
     public void onBeat(BeatDetection.EventInfo eventInfo)
     {
+		if (moveSpeed<maxSpeed)
+			moveSpeed += (maxSpeed-moveSpeed)/10f;
+		
         switch (eventInfo.messageInfo)
         {
             case BeatDetection.EventType.HitHat:
