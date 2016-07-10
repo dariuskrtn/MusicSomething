@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour {
 	public float moveSpeed = 15f;
 	public float jumpForce = 0.1f;
 	public KeyCode jumpKey = KeyCode.Space;
-	public LayerMask groundLayer;
+	public LayerMask groundLayer, jumpSphereLayer;
 	public GameObject confirm;
     public GameObject Cloud;
 
@@ -45,7 +45,7 @@ public class PlayerController : MonoBehaviour {
 		if (Input.GetKeyDown(jumpKey) && canJump()) {
 			Vector3 pos = new Vector3 (transform.position.x+1, transform.position.y, transform.position.z);
 			Instantiate (Cloud, pos, Quaternion.identity);
-			myRigidbody.velocity = new Vector2 (myRigidbody.velocity.x, myRigidbody.velocity.y+jumpForce);
+			myRigidbody.velocity = new Vector2 (myRigidbody.velocity.x, Mathf.Min(myRigidbody.velocity.y+jumpForce, jumpForce));
 		}
 	}
 
@@ -59,8 +59,12 @@ public class PlayerController : MonoBehaviour {
 
 	bool canJump() {
         if (dead || !running) return false;
-		if (Physics2D.IsTouchingLayers (myCollider, groundLayer)) {
+		if (Physics2D.OverlapCircle (groundCheck.position, 0.15F, groundLayer)) {
 			airJumped = false;
+			return true;
+		}
+		if (Physics2D.IsTouchingLayers (myCollider, jumpSphereLayer)) {
+			myRigidbody.velocity = new Vector2 (myRigidbody.velocity.x, 0);
 			return true;
 		}
 		if (doubleJump && !airJumped) {
